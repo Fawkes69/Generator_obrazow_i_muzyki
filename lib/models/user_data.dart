@@ -37,6 +37,12 @@ class UserData extends ChangeNotifier {
     complexity = newComplexity;
     notifyListeners();
   }
+  Color get invertedColor => Color.fromARGB(
+    (favoriteColor.a * 255.0).round().clamp(0, 255),
+    ((1.0 - favoriteColor.r) * 255.0).round().clamp(0, 255),
+    ((1.0 - favoriteColor.g) * 255.0).round().clamp(0, 255),
+    ((1.0 - favoriteColor.b) * 255.0).round().clamp(0, 255),
+  );
 }
 
 enum Mood {

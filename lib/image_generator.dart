@@ -95,7 +95,7 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
     // Dodaj tekst z imieniem użytkownika jeśli podane
     if (userData.name.isNotEmpty) {
       final textStyle = ui.TextStyle(
-        color: userData.favoriteColor,
+        color: userData.invertedColor,
         fontSize: 24,
         fontWeight: FontWeight.bold,
       );
@@ -194,7 +194,7 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
         trunkPaint,
       );
     } else {
-      // Liść/kwiat
+      // Kwiat
       final flowerPaint = Paint()..color = paint.color;
       for (int i = 0; i < 6; i++) {
         final angle = 2 * pi * i / 6;
@@ -267,7 +267,7 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
                 'Motyw: ${userData.imageTheme}',
                 style: TextStyle(
                   fontSize: 16,
-                  color: userData.favoriteColor,
+                  color: userData.favoriteColor.withValues(alpha: 100),
                 ),
               ),
 
@@ -282,7 +282,7 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
-                      color: userData.favoriteColor.withValues(alpha: 76), // ~30% opacity
+                      color: userData.favoriteColor.withValues(alpha: 76),
                       blurRadius: 10,
                       spreadRadius: 2,
                     ),
@@ -300,7 +300,7 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
                       Text(
                         'Generowanie obrazu...',
                         style: TextStyle(
-                          color: userData.favoriteColor,
+                          color: userData.favoriteColor.withValues(alpha: 100),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -316,13 +316,13 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
                       Icon(
                         Icons.image,
                         size: 60,
-                        color: Colors.grey[400],
+                        color: userData.invertedColor.withValues(alpha: 100),
                       ),
                       const SizedBox(height: 10),
                       Text(
                         'Kliknij poniżej, aby wygenerować',
                         style: TextStyle(
-                          color: Colors.grey[600],
+                          color: userData.invertedColor.withValues(alpha: 100),
                           fontStyle: FontStyle.italic,
                         ),
                       ),
@@ -346,7 +346,7 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       backgroundColor: userData.favoriteColor,
-                      foregroundColor: Colors.white,
+                      foregroundColor: userData.invertedColor.withValues(alpha: 100),
                     ),
                   ),
                   const SizedBox(width: 20),
@@ -358,7 +358,7 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: const Text('Obraz został "zapisany" (funkcjonalność do rozbudowy)'),
-                          backgroundColor: userData.favoriteColor,
+                          backgroundColor: userData.favoriteColor.withValues(alpha: 100),
                         ),
                       );
                     },
@@ -376,12 +376,13 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
 
               // Informacje o generowanym obrazie
               Card(
+                color: userData.invertedColor.withValues(alpha: 100),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
                       ListTile(
-                        leading: Icon(Icons.palette, color: userData.favoriteColor),
+                        leading: Icon(Icons.palette, color: userData.favoriteColor.withValues(alpha: 100)),
                         title: const Text('Dominujący kolor'),
                         trailing: Container(
                           width: 30,
@@ -389,12 +390,12 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
                           decoration: BoxDecoration(
                             color: userData.favoriteColor,
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.grey),
+                            border: Border.all(color: userData.invertedColor.withValues(alpha: 100)),
                           ),
                         ),
                       ),
                       ListTile(
-                        leading: Icon(Icons.category, color: userData.favoriteColor),
+                        leading: Icon(Icons.category, color: userData.favoriteColor.withValues(alpha: 100)),
                         title: const Text('Motyw'),
                         trailing: Chip(
                           label: Text(
@@ -405,24 +406,24 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
                                   : Colors.white,
                             ),
                           ),
-                          backgroundColor: userData.favoriteColor.withValues(alpha: 255), // 100% opacity
+                          backgroundColor: userData.favoriteColor.withValues(alpha: 100),
                         ),
                       ),
                       ListTile(
-                        leading: Icon(Icons.mood, color: userData.favoriteColor),
+                        leading: Icon(Icons.mood, color: userData.favoriteColor.withValues(alpha: 100)),
                         title: const Text('Nastrój'),
                         trailing: Text(
                           '${userData.mood.emoji} ${userData.mood.displayName}',
-                          style: TextStyle(color: userData.favoriteColor),
+                          style: TextStyle(color: userData.favoriteColor.withValues(alpha: 100)),
                         ),
                       ),
                       ListTile(
-                        leading: Icon(Icons.layers, color: userData.favoriteColor),
+                        leading: Icon(Icons.layers, color: userData.favoriteColor.withValues(alpha: 100)),
                         title: const Text('Złożoność'),
                         trailing: Text(
                           '${(userData.complexity * 100).toInt()}%',
                           style: TextStyle(
-                            color: userData.favoriteColor,
+                            color: userData.favoriteColor.withValues(alpha: 100),
                             fontWeight: FontWeight.bold,
                           ),
                         ),

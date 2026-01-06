@@ -132,7 +132,7 @@ class UserInputPage extends StatelessWidget {
               width: double.infinity,
               height: 60,
               decoration: BoxDecoration(
-                color: userData.favoriteColor,
+                color: userData.favoriteColor.withValues(alpha: 100),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: Colors.grey),
               ),
@@ -182,7 +182,7 @@ class UserInputPage extends StatelessWidget {
           const SizedBox(height: 10),
           Wrap(
             spacing: 10,
-            children: ['abstract', 'nature', 'geometric', 'space', 'water']
+            children: ['Abstrakcyjny', 'Natura', 'Geometria', 'Kosmos', 'Woda']
                 .map((theme) {
               return FilterChip(
                 label: Text(theme),

@@ -22,5 +22,16 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/sounds/
     - assets/images/
+    - assets/sounds/a4.wav
+    - assets/sounds/b4.wav
+    - assets/sounds/c4.wav
+    - assets/sounds/d4.wav
+    - assets/sounds/f4.wav
+    - assets/sounds/g4.wav
+    - assets/sounds/a5.wav
+    - assets/sounds/b5.wav
+    - assets/sounds/c5.wav
+    - assets/sounds/d5.wav
+    - assets/sounds/f5.wav
+    - assets/sounds/g5.wav
