@@ -159,8 +159,8 @@ class UserInputPage extends StatelessWidget {
               Expanded(
                 child: Slider(
                   value: userData.tempo.toDouble(),
-                  min: 60,
-                  max: 200,
+                  min: 10,
+                  max: 150,
                   divisions: 14,
                   label: '${userData.tempo} BPM',
                   onChanged: (value) {
