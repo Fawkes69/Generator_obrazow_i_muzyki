@@ -1,7 +1,11 @@
 import 'dart:math';
+import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'models/user_data.dart';
 
 class ImageGeneratorPage extends StatefulWidget {
@@ -14,6 +18,8 @@ class ImageGeneratorPage extends StatefulWidget {
 class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
   ui.Image? _generatedImage;
   bool _isGenerating = false;
+  bool _isSaving = false;
+  Uint8List? _imageBytes;
 
   Future<void> _generateImage(UserData userData) async {
     setState(() {
@@ -25,8 +31,13 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
 
     final image = await _createGeneratedImage(userData);
 
+    // KONWERSJA OBRAZU NA BYTES
+    final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    final bytes = byteData!.buffer.asUint8List();
+
     setState(() {
       _generatedImage = image;
+      _imageBytes = bytes;
       _isGenerating = false;
     });
   }
@@ -41,7 +52,7 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
     final random = Random();
 
     // Tło
-    paint.color = userData.favoriteColor.withValues(alpha: 25); // ~10% opacity
+    paint.color = userData.favoriteColor.withValues(alpha: 25);
     canvas.drawRect(Rect.fromLTWH(0, 0, width.toDouble(), height.toDouble()), paint);
 
     // Generuj wzory na podstawie danych użytkownika
@@ -56,7 +67,7 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
       Color shapeColor;
       switch (userData.mood) {
         case Mood.happy:
-          shapeColor = Colors.yellow.withValues(alpha: 178); // ~70% opacity
+          shapeColor = Colors.yellow.withValues(alpha: 178);
           break;
         case Mood.sad:
           shapeColor = Colors.blue.withValues(alpha: 178);
@@ -207,7 +218,7 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
 
   void _drawSpaceShape(Canvas canvas, Paint paint, double x, double y, double size, Random random) {
     // Gwiazda
-    final starPaint = Paint()..color = Colors.white.withValues(alpha: 229); // ~90% opacity
+    final starPaint = Paint()..color = Colors.white.withValues(alpha: 229);
     canvas.drawCircle(Offset(x, y), size / 4, starPaint);
 
     // Promienie
@@ -245,6 +256,74 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
     }
 
     canvas.drawPath(path, wavePaint);
+  }
+
+  Future<void> _saveImageLocally(UserData userData) async {
+    if (_imageBytes == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Najpierw wygeneruj obraz'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _isSaving = true;
+    });
+
+    try {
+      // 1. Pobierz folder dokumentów aplikacji
+      final directory = await getApplicationDocumentsDirectory();
+
+      // 2. Utwórz folder dla obrazów
+      final myImagesFolder = Directory('${directory.path}/my_generated_images');
+      if (!await myImagesFolder.exists()) {
+        await myImagesFolder.create(recursive: true);
+      }
+
+      // 3. Stwórz nazwę pliku
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final safeName = userData.name.replaceAll(RegExp(r'[^a-zA-Z0-9]'), '_');
+      final fileName = '${safeName.isNotEmpty ? '${safeName}_' : ''}${userData.imageTheme}_$timestamp.png';
+      final filePath = '${myImagesFolder.path}/$fileName';
+
+      // 4. Zapisz plik
+      final file = File(filePath);
+      await file.writeAsBytes(_imageBytes!);
+
+      // 5. Zapisz ścieżkę
+      final prefs = await SharedPreferences.getInstance();
+      final savedImages = prefs.getStringList('saved_images') ?? [];
+      savedImages.add(filePath);
+      await prefs.setStringList('saved_images', savedImages);
+
+      // 6. Pokaż sukces
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Obraz zapisany! $fileName'),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      }
+
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Błąd zapisu: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      }
+    } finally {
+      setState(() {
+        _isSaving = false;
+      });
+    }
   }
 
   @override
@@ -351,19 +430,17 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
                   ),
                   const SizedBox(width: 20),
                   OutlinedButton.icon(
-                    onPressed: _generatedImage == null
+                    onPressed: _imageBytes == null || _isSaving
                         ? null
-                        : () {
-                      // zapisywanie obrazu
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text('Obraz został "zapisany" (funkcjonalność do rozbudowy)'),
-                          backgroundColor: userData.favoriteColor.withValues(alpha: 100),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.download),
-                    label: const Text('Zapisz'),
+                        : () => _saveImageLocally(userData),
+                    icon: _isSaving
+                        ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                        : const Icon(Icons.download),
+                    label: Text(_isSaving ? 'ZAPISYWANIE...' : 'Zapisz lokalnie'),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       side: BorderSide(color: userData.favoriteColor),

@@ -5,6 +5,8 @@ import 'package:aplikacja_gen_obraz_np/models/user_data.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:provider/provider.dart';
 
+import 'gallery.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -19,6 +21,7 @@ class _HomePageState extends State<HomePage> {
     const UserInputPage(),
     const MusicGeneratorPage(),
     const ImageGeneratorPage(),
+    const GalleryPage()
   ];
 
   @override
@@ -49,6 +52,10 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.image),
             label: 'Obrazy',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.browse_gallery),
+            label: 'Galeria',
           ),
         ],
       ),
