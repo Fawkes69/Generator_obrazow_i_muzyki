@@ -9,7 +9,6 @@ dependencies:
   audioplayers: ^5.2.1
   provider: ^6.1.1
   permission_handler: ^12.0.1
-  share_plus: ^12.0.1
   just_audio: ^0.10.5
   shared_preferences: ^2.2.2
   path_provider: ^2.1.0

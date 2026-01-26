@@ -86,16 +86,16 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
 
       // Różne kształty na podstawie motywu
       switch (userData.imageTheme) {
-        case 'geometric':
+        case 'Geometria':
           _drawGeometricShape(canvas, paint, x, y, size, random);
           break;
-        case 'nature':
+        case 'Natura':
           _drawNatureShape(canvas, paint, x, y, size, random);
           break;
-        case 'space':
+        case 'Kosmos':
           _drawSpaceShape(canvas, paint, x, y, size, random);
           break;
-        case 'water':
+        case 'Woda':
           _drawWaterShape(canvas, paint, x, y, size, random);
           break;
         default:

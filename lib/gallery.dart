@@ -187,7 +187,7 @@ class _GalleryPageState extends State<GalleryPage> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Rozmiar: $fileSize KB',
+                          'Rozmiar: ${fileSize} KB',
                           style: TextStyle(
                             color: Colors.grey.withValues(alpha: 150),
                           ),
