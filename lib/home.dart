@@ -34,6 +34,9 @@ class _HomePageState extends State<HomePage> {
       ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        selectedItemColor: Colors.deepPurple,
+        unselectedItemColor: Colors.green,
         currentIndex: _selectedIndex,
         onTap: (index) {
           setState(() {
@@ -54,7 +57,7 @@ class _HomePageState extends State<HomePage> {
             label: 'Obrazy',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.browse_gallery),
+            icon: Icon(Icons.grid_view_rounded),
             label: 'Galeria',
           ),
         ],
@@ -167,9 +170,9 @@ class UserInputPage extends StatelessWidget {
                 child: Slider(
                   value: userData.tempo.toDouble(),
                   min: 10,
-                  max: 150,
+                  max: 100,
                   divisions: 14,
-                  label: '${userData.tempo} BPM',
+                  label: '${userData.tempo} %',
                   onChanged: (value) {
                     userData.updateTempo(value.toInt());
                   },
@@ -177,7 +180,7 @@ class UserInputPage extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Text(
-                '${userData.tempo} BPM',
+                '${userData.tempo} %',
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ],

@@ -19,7 +19,7 @@ class _MusicGeneratorPageState extends State<MusicGeneratorPage> {
   int _currentNoteIndex = 0;
   Timer? _musicTimer;
 
-  // Mapowanie nut do plików dźwiękowych (dopasuj do swoich plików)
+  // Mapowanie nut do plików dźwiękowych
   final Map<String, String> _noteToSoundFile = {
     'C4': 'sounds/c4.wav',
     'D4': 'sounds/d4.wav',
@@ -77,7 +77,7 @@ class _MusicGeneratorPageState extends State<MusicGeneratorPage> {
       _currentNoteIndex = 0;
     });
 
-    int noteDuration = (60000 / userData.tempo).round();
+    int noteDuration = (160000 / userData.tempo).round(); //długość dźwięku w ms dzielone na tępo użytkownika
 
     _musicTimer?.cancel();
     _musicTimer = Timer.periodic(
@@ -157,6 +157,12 @@ class _MusicGeneratorPageState extends State<MusicGeneratorPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              const SizedBox(height: 20),
+              const Text(
+                'Generator Muzyki',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
               const SizedBox(height: 40),
               Icon(
                 _isPlaying ? Icons.music_note : Icons.music_off,

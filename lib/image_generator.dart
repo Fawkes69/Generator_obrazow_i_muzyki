@@ -442,7 +442,7 @@ class _ImageGeneratorPageState extends State<ImageGeneratorPage> {
                         : const Icon(Icons.download),
                     label: Text(_isSaving ? 'ZAPISYWANIE...' : 'Zapisz lokalnie'),
                     style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
                       side: BorderSide(color: userData.favoriteColor),
                     ),
                   ),

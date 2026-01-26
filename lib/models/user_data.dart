@@ -4,7 +4,7 @@ class UserData extends ChangeNotifier {
   String name = '';
   Mood mood = Mood.neutral;
   Color favoriteColor = Colors.blue;
-  int tempo = 120;
+  int tempo = 75;
   String imageTheme = 'abstract';
   double complexity = 0.5;
 

@@ -187,7 +187,7 @@ class _GalleryPageState extends State<GalleryPage> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Rozmiar: ${fileSize} KB',
+                          'Rozmiar: $fileSize KB',
                           style: TextStyle(
                             color: Colors.grey.withValues(alpha: 150),
                           ),
@@ -267,17 +267,6 @@ class _GalleryPageState extends State<GalleryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Galeria Obrazów'),
-        backgroundColor: Theme.of(context).primaryColor,
-        foregroundColor: Colors.white.withValues(alpha: 200),
-        actions: [
-          IconButton(
-            onPressed: _refreshGallery,
-            icon: const Icon(Icons.refresh),
-          ),
-        ],
-      ),
       body: _isLoading
           ? Center(
         child: Column(
